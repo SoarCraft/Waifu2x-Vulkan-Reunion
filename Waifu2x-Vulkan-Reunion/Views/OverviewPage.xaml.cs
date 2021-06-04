@@ -36,9 +36,12 @@ namespace Waifu2x_Vulkan_Reunion.Views {
         }
 
         private async void SetFolder(object sender, RoutedEventArgs e) {
-            var folder = await new FileSavePicker() {
+            var picker = new FileSavePicker() {
                 SuggestedStartLocation = PickerLocationId.PicturesLibrary
-            }.PickSaveFileAsync();
+            };
+
+            WindowHelper.InitializeWithWindow(picker);
+            var folder = await picker.PickSaveFileAsync();
 
             if (folder == null)
                 return;
