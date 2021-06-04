@@ -1,12 +1,11 @@
 namespace Waifu2x_Vulkan_Reunion.Views {
     using System;
-    using WinRT;
-    using System.Runtime.InteropServices;
     using CommunityToolkit.Mvvm.DependencyInjection;
     using Microsoft.UI.Xaml;
     using Microsoft.UI.Xaml.Controls;
 
     using Waifu2x_Vulkan_Reunion.ViewModels;
+    using Waifu2x_Vulkan_Reunion.Helpers;
     using Windows.Storage;
     using Windows.Storage.Pickers;
 
@@ -27,7 +26,7 @@ namespace Waifu2x_Vulkan_Reunion.Views {
                 FileTypeFilter = { ".jpg" }
             };
 
-            InitializeWithWindow(picker);
+            PickersHelper.InitializeWithWindow(picker);
             var image = await picker.PickSingleFileAsync();
 
             if (image == null)
@@ -56,27 +55,5 @@ namespace Waifu2x_Vulkan_Reunion.Views {
             ((Button)sender).Content = waifu2X.execute() == 0 ? "Successful" : "Error";
         }
 
-        public static void InitializeWithWindow(object obj) {
-            // When running on win32, FileOpenPicker needs to know the top-level hwnd via IInitializeWithWindow::Initialize.
-            if (Window.Current == null) {
-                var initializeWithWindowWrapper = obj.As<IInitializeWithWindow>();
-                var hwnd = App.MainWindow.As<IWindowNative>().WindowHandle;
-                initializeWithWindowWrapper.Initialize(hwnd);
-            }
-        }
-
-    }
-
-    [ComImport]
-    [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IInitializeWithWindow {
-        void Initialize([In] IntPtr hwnd);
-    }
-    [ComImport]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-    internal interface IWindowNative {
-        IntPtr WindowHandle { get; }
     }
 }
