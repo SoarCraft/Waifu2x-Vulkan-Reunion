@@ -4,13 +4,10 @@ namespace Waifu2x_Vulkan_Reunion.Helpers {
     using Microsoft.UI.Xaml;
     using WinRT;
 
-    internal static class PickersHelper {
+    internal static class WindowHelper {
         internal static void InitializeWithWindow(object obj) {
-            if (Window.Current == null) {
-                var initializeWithWindowWrapper = obj.As<IInitializeWithWindow>();
-                var hwnd = App.MainWindow.As<IWindowNative>().WindowHandle;
-                initializeWithWindowWrapper.Initialize(hwnd);
-            }
+            if (Window.Current == null)
+                obj.As<IInitializeWithWindow>().Initialize(App.MainWindow.As<IWindowNative>().WindowHandle);
         }
     }
 

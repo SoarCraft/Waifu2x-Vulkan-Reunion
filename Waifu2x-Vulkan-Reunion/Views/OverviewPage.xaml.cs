@@ -26,7 +26,7 @@ namespace Waifu2x_Vulkan_Reunion.Views {
                 FileTypeFilter = { ".jpg" }
             };
 
-            PickersHelper.InitializeWithWindow(picker);
+            WindowHelper.InitializeWithWindow(picker);
             var image = await picker.PickSingleFileAsync();
 
             if (image == null)
