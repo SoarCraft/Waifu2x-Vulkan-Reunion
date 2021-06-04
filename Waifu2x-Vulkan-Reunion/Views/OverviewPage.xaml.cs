@@ -50,11 +50,11 @@ namespace Waifu2x_Vulkan_Reunion.Views {
         }
 
         private void Start(object sender, RoutedEventArgs e) {
-            if (input == null || output == null)
+            if (input == null)
                 return;
 
             waifu2X.setInput(input.Path);
-            waifu2X.setOutput(output.Path);
+            waifu2X.setOutput(input.Path + "_opt.png");
             ((Button)sender).Content = waifu2X.execute() == 0 ? "Successful" : "Error";
         }
 
