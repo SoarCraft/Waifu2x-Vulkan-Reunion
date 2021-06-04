@@ -1,44 +1,38 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
+namespace Waifu2x_Vulkan_Reunion.Views {
+    using CommunityToolkit.Mvvm.DependencyInjection;
 
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Input;
 
-using Waifu2x_Vulkan_Reunion.Contracts.Services;
-using Waifu2x_Vulkan_Reunion.ViewModels;
+    using Waifu2x_Vulkan_Reunion.Contracts.Services;
+    using Waifu2x_Vulkan_Reunion.ViewModels;
 
-using Windows.System;
+    using Windows.System;
 
-namespace Waifu2x_Vulkan_Reunion.Views
-{
     // TODO WTS: Change the icons and titles for all NavigationViewItems in ShellPage.xaml.
-    public sealed partial class ShellPage : Page
-    {
+    public sealed partial class ShellPage : Page {
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
         private readonly KeyboardAccelerator _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
 
         public ShellViewModel ViewModel { get; }
 
-        public ShellPage(ShellViewModel viewModel)
-        {
+        public ShellPage(ShellViewModel viewModel) {
             ViewModel = viewModel;
             InitializeComponent();
             ViewModel.NavigationService.Frame = shellFrame;
             ViewModel.NavigationViewService.Initialize(navigationView);
         }
 
-        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) {
             // Keyboard accelerators are added here to avoid showing 'Alt + left' tooltip on the page.
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
             KeyboardAccelerators.Add(_altLeftKeyboardAccelerator);
             KeyboardAccelerators.Add(_backKeyboardAccelerator);
         }
 
-        private static KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null)
-        {
+        private static KeyboardAccelerator BuildKeyboardAccelerator(VirtualKey key, VirtualKeyModifiers? modifiers = null) {
             var keyboardAccelerator = new KeyboardAccelerator() { Key = key };
-            if (modifiers.HasValue)
-            {
+            if (modifiers.HasValue) {
                 keyboardAccelerator.Modifiers = modifiers.Value;
             }
 
@@ -46,8 +40,7 @@ namespace Waifu2x_Vulkan_Reunion.Views
             return keyboardAccelerator;
         }
 
-        private static void OnKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-        {
+        private static void OnKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) {
             var navigationService = Ioc.Default.GetService<INavigationService>();
             var result = navigationService.GoBack();
             args.Handled = result;

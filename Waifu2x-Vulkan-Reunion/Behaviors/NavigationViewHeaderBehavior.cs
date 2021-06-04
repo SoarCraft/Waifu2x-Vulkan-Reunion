@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -7,82 +7,69 @@ using Microsoft.Xaml.Interactivity;
 
 using Waifu2x_Vulkan_Reunion.Contracts.Services;
 
-namespace Waifu2x_Vulkan_Reunion.Behaviors
-{
-    public class NavigationViewHeaderBehavior : Behavior<NavigationView>
-    {
+namespace Waifu2x_Vulkan_Reunion.Behaviors {
+    public class NavigationViewHeaderBehavior : Behavior<NavigationView> {
         private static NavigationViewHeaderBehavior _current;
         private Page _currentPage;
 
         public DataTemplate DefaultHeaderTemplate { get; set; }
 
-        public object DefaultHeader
-        {
+        public object DefaultHeader {
             get { return GetValue(DefaultHeaderProperty); }
             set { SetValue(DefaultHeaderProperty, value); }
         }
 
         public static readonly DependencyProperty DefaultHeaderProperty = DependencyProperty.Register("DefaultHeader", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
 
-        public static NavigationViewHeaderMode GetHeaderMode(Page item)
-        {
+        public static NavigationViewHeaderMode GetHeaderMode(Page item) {
             return (NavigationViewHeaderMode)item.GetValue(HeaderModeProperty);
         }
 
-        public static void SetHeaderMode(Page item, NavigationViewHeaderMode value)
-        {
+        public static void SetHeaderMode(Page item, NavigationViewHeaderMode value) {
             item.SetValue(HeaderModeProperty, value);
         }
 
         public static readonly DependencyProperty HeaderModeProperty =
             DependencyProperty.RegisterAttached("HeaderMode", typeof(bool), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(NavigationViewHeaderMode.Always, (d, e) => _current.UpdateHeader()));
 
-        public static object GetHeaderContext(Page item)
-        {
+        public static object GetHeaderContext(Page item) {
             return item.GetValue(HeaderContextProperty);
         }
 
-        public static void SetHeaderContext(Page item, object value)
-        {
+        public static void SetHeaderContext(Page item, object value) {
             item.SetValue(HeaderContextProperty, value);
         }
 
         public static readonly DependencyProperty HeaderContextProperty =
             DependencyProperty.RegisterAttached("HeaderContext", typeof(object), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeader()));
 
-        public static DataTemplate GetHeaderTemplate(Page item)
-        {
+        public static DataTemplate GetHeaderTemplate(Page item) {
             return (DataTemplate)item.GetValue(HeaderTemplateProperty);
         }
 
-        public static void SetHeaderTemplate(Page item, DataTemplate value)
-        {
+        public static void SetHeaderTemplate(Page item, DataTemplate value) {
             item.SetValue(HeaderTemplateProperty, value);
         }
 
         public static readonly DependencyProperty HeaderTemplateProperty =
             DependencyProperty.RegisterAttached("HeaderTemplate", typeof(DataTemplate), typeof(NavigationViewHeaderBehavior), new PropertyMetadata(null, (d, e) => _current.UpdateHeaderTemplate()));
 
-        protected override void OnAttached()
-        {
+        protected override void OnAttached() {
             base.OnAttached();
             _current = this;
             var navigationService = Ioc.Default.GetService<INavigationService>();
             navigationService.Navigated += OnNavigated;
         }
 
-        protected override void OnDetaching()
-        {
+        protected override void OnDetaching() {
             base.OnDetaching();
             var navigationService = Ioc.Default.GetService<INavigationService>();
             navigationService.Navigated -= OnNavigated;
         }
 
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
+        private void OnNavigated(object sender, NavigationEventArgs e) {
             var frame = sender as Frame;
-            if (frame.Content is Page page)
-            {
+            if (frame.Content is Page page) {
                 _currentPage = page;
 
                 UpdateHeader();
@@ -90,44 +77,31 @@ namespace Waifu2x_Vulkan_Reunion.Behaviors
             }
         }
 
-        private void UpdateHeader()
-        {
-            if (_currentPage != null)
-            {
+        private void UpdateHeader() {
+            if (_currentPage != null) {
                 var headerMode = GetHeaderMode(_currentPage);
-                if (headerMode == NavigationViewHeaderMode.Never)
-                {
+                if (headerMode == NavigationViewHeaderMode.Never) {
                     AssociatedObject.Header = null;
                     AssociatedObject.AlwaysShowHeader = false;
-                }
-                else
-                {
+                } else {
                     var headerFromPage = GetHeaderContext(_currentPage);
-                    if (headerFromPage != null)
-                    {
+                    if (headerFromPage != null) {
                         AssociatedObject.Header = headerFromPage;
-                    }
-                    else
-                    {
+                    } else {
                         AssociatedObject.Header = DefaultHeader;
                     }
 
-                    if (headerMode == NavigationViewHeaderMode.Always)
-                    {
+                    if (headerMode == NavigationViewHeaderMode.Always) {
                         AssociatedObject.AlwaysShowHeader = true;
-                    }
-                    else
-                    {
+                    } else {
                         AssociatedObject.AlwaysShowHeader = false;
                     }
                 }
             }
         }
 
-        private void UpdateHeaderTemplate()
-        {
-            if (_currentPage != null)
-            {
+        private void UpdateHeaderTemplate() {
+            if (_currentPage != null) {
                 var headerTemplate = GetHeaderTemplate(_currentPage);
                 AssociatedObject.HeaderTemplate = headerTemplate ?? DefaultHeaderTemplate;
             }

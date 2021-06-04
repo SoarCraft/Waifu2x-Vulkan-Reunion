@@ -1,10 +1,8 @@
-﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
-namespace Waifu2x_Vulkan_Reunion.Contracts.Services
-{
-    public interface INavigationService
-    {
+namespace Waifu2x_Vulkan_Reunion.Contracts.Services {
+    public interface INavigationService {
         event NavigatedEventHandler Navigated;
 
         bool CanGoBack { get; }

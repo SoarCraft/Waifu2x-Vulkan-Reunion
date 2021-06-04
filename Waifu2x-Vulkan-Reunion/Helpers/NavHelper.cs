@@ -1,10 +1,8 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace Waifu2x_Vulkan_Reunion.Helpers
-{
-    public class NavHelper
-    {
+namespace Waifu2x_Vulkan_Reunion.Helpers {
+    public class NavHelper {
         // This helper class allows to specify the page that will be shown when you click on a NavigationViewItem
         //
         // Usage in xaml:
@@ -12,13 +10,11 @@ namespace Waifu2x_Vulkan_Reunion.Helpers
         //
         // Usage in code:
         // NavHelper.SetNavigateTo(navigationViewItem, typeof(MainViewModel).FullName);
-        public static string GetNavigateTo(NavigationViewItem item)
-        {
+        public static string GetNavigateTo(NavigationViewItem item) {
             return (string)item.GetValue(NavigateToProperty);
         }
 
-        public static void SetNavigateTo(NavigationViewItem item, string value)
-        {
+        public static void SetNavigateTo(NavigationViewItem item, string value) {
             item.SetValue(NavigateToProperty, value);
         }
 

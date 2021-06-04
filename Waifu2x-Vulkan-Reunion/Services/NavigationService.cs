@@ -1,29 +1,23 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
+namespace Waifu2x_Vulkan_Reunion.Services {
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Navigation;
 
-using Waifu2x_Vulkan_Reunion.Contracts.Services;
-using Waifu2x_Vulkan_Reunion.Contracts.ViewModels;
-using Waifu2x_Vulkan_Reunion.Helpers;
+    using Waifu2x_Vulkan_Reunion.Contracts.Services;
+    using Waifu2x_Vulkan_Reunion.Contracts.ViewModels;
+    using Waifu2x_Vulkan_Reunion.Helpers;
 
-namespace Waifu2x_Vulkan_Reunion.Services
-{
     // For more information on navigation between pages see
     // https://github.com/Microsoft/WindowsTemplateStudio/blob/release/docs/WinUI/navigation.md
-    public class NavigationService : INavigationService
-    {
+    public class NavigationService : INavigationService {
         private readonly IPageService _pageService;
         private object _lastParameterUsed;
         private Frame _frame;
 
         public event NavigatedEventHandler Navigated;
 
-        public Frame Frame
-        {
-            get
-            {
-                if (_frame == null)
-                {
+        public Frame Frame {
+            get {
+                if (_frame == null) {
                     _frame = App.MainWindow.Content as Frame;
                     RegisterFrameEvents();
                 }
@@ -31,8 +25,7 @@ namespace Waifu2x_Vulkan_Reunion.Services
                 return _frame;
             }
 
-            set
-            {
+            set {
                 UnregisterFrameEvents();
                 _frame = value;
                 RegisterFrameEvents();
@@ -41,35 +34,27 @@ namespace Waifu2x_Vulkan_Reunion.Services
 
         public bool CanGoBack => Frame.CanGoBack;
 
-        public NavigationService(IPageService pageService)
-        {
+        public NavigationService(IPageService pageService) {
             _pageService = pageService;
         }
 
-        private void RegisterFrameEvents()
-        {
-            if (_frame != null)
-            {
+        private void RegisterFrameEvents() {
+            if (_frame != null) {
                 _frame.Navigated += OnNavigated;
             }
         }
 
-        private void UnregisterFrameEvents()
-        {
-            if (_frame != null)
-            {
+        private void UnregisterFrameEvents() {
+            if (_frame != null) {
                 _frame.Navigated -= OnNavigated;
             }
         }
 
-        public bool GoBack()
-        {
-            if (CanGoBack)
-            {
+        public bool GoBack() {
+            if (CanGoBack) {
                 var vmBeforeNavigation = _frame.GetPageViewModel();
                 _frame.GoBack();
-                if (vmBeforeNavigation is INavigationAware navigationAware)
-                {
+                if (vmBeforeNavigation is INavigationAware navigationAware) {
                     navigationAware.OnNavigatedFrom();
                 }
 
@@ -79,20 +64,16 @@ namespace Waifu2x_Vulkan_Reunion.Services
             return false;
         }
 
-        public bool NavigateTo(string pageKey, object parameter = null, bool clearNavigation = false)
-        {
+        public bool NavigateTo(string pageKey, object parameter = null, bool clearNavigation = false) {
             var pageType = _pageService.GetPageType(pageKey);
 
-            if (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed)))
-            {
+            if (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed))) {
                 _frame.Tag = clearNavigation;
                 var vmBeforeNavigation = _frame.GetPageViewModel();
                 var navigated = _frame.Navigate(pageType, parameter);
-                if (navigated)
-                {
+                if (navigated) {
                     _lastParameterUsed = parameter;
-                    if (vmBeforeNavigation is INavigationAware navigationAware)
-                    {
+                    if (vmBeforeNavigation is INavigationAware navigationAware) {
                         navigationAware.OnNavigatedFrom();
                     }
                 }
@@ -106,18 +87,14 @@ namespace Waifu2x_Vulkan_Reunion.Services
         public void CleanNavigation()
             => _frame.BackStack.Clear();
 
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            if (sender is Frame frame)
-            {
+        private void OnNavigated(object sender, NavigationEventArgs e) {
+            if (sender is Frame frame) {
                 bool clearNavigation = (bool)frame.Tag;
-                if (clearNavigation)
-                {
+                if (clearNavigation) {
                     frame.BackStack.Clear();
                 }
 
-                if (frame.GetPageViewModel() is INavigationAware navigationAware)
-                {
+                if (frame.GetPageViewModel() is INavigationAware navigationAware) {
                     navigationAware.OnNavigatedTo(e.Parameter);
                 }
 

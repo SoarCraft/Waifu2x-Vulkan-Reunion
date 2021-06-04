@@ -1,44 +1,38 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
-
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-
-using Waifu2x_Vulkan_Reunion.Activation;
-using Waifu2x_Vulkan_Reunion.Contracts.Services;
-using Waifu2x_Vulkan_Reunion.Helpers;
-using Waifu2x_Vulkan_Reunion.Services;
-using Waifu2x_Vulkan_Reunion.ViewModels;
-using Waifu2x_Vulkan_Reunion.Views;
-
 // To learn more about WinUI3, see: https://docs.microsoft.com/windows/apps/winui/winui3/.
-namespace Waifu2x_Vulkan_Reunion
-{
-    public partial class App : Application
-    {
+namespace Waifu2x_Vulkan_Reunion {
+    using CommunityToolkit.Mvvm.DependencyInjection;
+
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.UI.Xaml;
+
+    using Waifu2x_Vulkan_Reunion.Activation;
+    using Waifu2x_Vulkan_Reunion.Contracts.Services;
+    using Waifu2x_Vulkan_Reunion.Helpers;
+    using Waifu2x_Vulkan_Reunion.Services;
+    using Waifu2x_Vulkan_Reunion.ViewModels;
+    using Waifu2x_Vulkan_Reunion.Views;
+
+    public partial class App : Application {
         public static Window MainWindow { get; set; } = new Window() { Title = "AppDisplayName".GetLocalized() };
 
-        public App()
-        {
+        public App() {
             InitializeComponent();
             UnhandledException += App_UnhandledException;
             Ioc.Default.ConfigureServices(ConfigureServices());
         }
 
-        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
             // TODO WTS: Please log and handle the exception as appropriate to your scenario
             // For more info see https://docs.microsoft.com/windows/winui/api/microsoft.ui.xaml.unhandledexceptioneventargs
         }
 
-        protected override async void OnLaunched(LaunchActivatedEventArgs args)
-        {
+        protected override async void OnLaunched(LaunchActivatedEventArgs args) {
             base.OnLaunched(args);
             var activationService = Ioc.Default.GetService<IActivationService>();
             await activationService.ActivateAsync(args);
         }
 
-        private System.IServiceProvider ConfigureServices()
-        {
+        private System.IServiceProvider ConfigureServices() {
             // TODO WTS: Register your services, viewmodels and pages here
             var services = new ServiceCollection();
 
