@@ -1,5 +1,6 @@
 namespace Waifu2x_Vulkan_Reunion.Views {
     using System;
+    using System.Collections.Generic;
     using CommunityToolkit.Mvvm.DependencyInjection;
     using Microsoft.UI.Xaml;
     using Microsoft.UI.Xaml.Controls;
@@ -39,6 +40,7 @@ namespace Waifu2x_Vulkan_Reunion.Views {
             var picker = new FileSavePicker() {
                 SuggestedStartLocation = PickerLocationId.PicturesLibrary
             };
+            picker.FileTypeChoices.Add("Image", new List<string> { ".png" });
 
             WindowHelper.InitializeWithWindow(picker);
             var folder = await picker.PickSaveFileAsync();
@@ -54,7 +56,7 @@ namespace Waifu2x_Vulkan_Reunion.Views {
                 return;
 
             waifu2X.setInput(input.Path);
-            waifu2X.setOutput(input.Path + "_opt.png");
+            waifu2X.setOutput(output.Path);
             ((Button)sender).Content = waifu2X.execute() == 0 ? "Successful" : "Error";
         }
 
